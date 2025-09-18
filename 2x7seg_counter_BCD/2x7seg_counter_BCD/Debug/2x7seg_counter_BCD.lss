@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.8  C:\Users\marlo\Documents\Atmel Studio\7.0\2x7seg_counter_BCD\2x7seg_counter_BCD\main.asm Tue Sep 16 19:01:28 2025
+AVRASM ver. 2.2.8  C:\Users\marlo\Documents\Atmel Studio\7.0\2x7seg_counter_BCD\2x7seg_counter_BCD\main.asm Thu Sep 18 18:02:32 2025
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m328Pdef.inc'
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m328Pdef.inc'
@@ -1025,6 +1025,7 @@ AVRASM ver. 2.2.8  C:\Users\marlo\Documents\Atmel Studio\7.0\2x7seg_counter_BCD\
 00000e 2713                      		eor r17, r19  ; 01 XOR 03 = 02, 02 XOR 03 = 01
                                  		
 00000f d007                      		rcall delay1000ms
+                                 
 000010 cff6                      		rjmp send
                                  
                                      ; rcall delay1000ms
