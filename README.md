@@ -9,8 +9,6 @@
 - [Estrutura do repositório](#estrutura-do-repositório)  
 - [Como abrir / executar](#como-abrir--executar)  
 - [Executar firmware (.hex) no SimulIDE](#executar-firmware-hex-no-simulide)  
-- [Boas práticas](#boas-práticas)  
-- [Contribuições e contato](#contribuições-e-contato)
 
 ---
 
