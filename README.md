@@ -1,54 +1,46 @@
-# Projeto Semáforo
+# Traffic Light Project  
 
-> Repositório com subprojetos e arquivos de simulação desenvolvidos para estudos com AVR (Microchip/Atmel Studio) e SimulIDE.
-
----
-
-## Sumário
-- [Visão geral](#visão-geral)  
-- [Estrutura do repositório](#estrutura-do-repositório)  
-- [Como abrir / executar](#como-abrir--executar)  
-- [Executar firmware (.hex) no SimulIDE](#executar-firmware-hex-no-simulide)  
+> Repository with subprojects and simulation files developed for AVR studies (Microchip/Atmel Studio) and SimulIDE.  
 
 ---
 
-## Visão geral
-Os arquivos deste repositório correspondem à pasta de projetos do Atmel/Microchip Studio, organizada originalmente em:
-.../Atmel Studio/7.0
+## Overview  
+This repository contains Atmel/Microchip Studio project files, originally organized under:  
+`.../Atmel Studio/7.0`  
 
-A raiz do repositório agrupa os subprojetos AVR e os projetos de simulação usados durante o desenvolvimento e os testes.
-
----
-
-## Estrutura do repositório
-- `CIRCUITOS_SIMULIDE/` — arquivos de simulação criados no SimulIDE.  
-- `estudo_cseg/`, `2x7seg_counter_BCD/`, ... — subprojetos AVR (Microchip/Atmel Studio) usados para estudo.  
-- `projeto_parte_display/` — projeto AVR referente à implementação do **contador com display de 7 segmentos**.
+The root folder groups AVR subprojects and simulation projects used during development and testing.  
 
 ---
 
-## Como abrir / executar
-
-### Projetos no Microchip (Atmel) Studio
-1. Abra o **Microchip Studio**.  
-2. Vá em **File → Open → Project/Solution** (ou *Abrir projeto*).  
-3. Navegue até a pasta do subprojeto desejado dentro da raiz (ex.: `.../Atmel Studio/7.0/projeto_parte_display/`).  
-4. Abra o arquivo de solução do projeto (`*.atsln` ou similar).  
-5. Na janela **Solution Explorer** dentro do Microchip Studio, abra (duplo clique) o arquivo `main.asm` ou o arquivo fonte principal para editar e/ou executar.
-
-> Observação: dependendo de como o projeto foi salvo, a extensão e nomes de arquivos podem variar. Procure por arquivos de solução (`*.atsln`) ou projeto do Microchip/Atmel.
-
-### Projetos SimulIDE (`*.sim1`)
-1. Abra o **SimulIDE**.
-2. Localize o circuito, `*.sim1`, desejado.
-3. Em SimulIDE, arraste o arquivo `*.sim1` para a janela do simulador **ou** use *File → Open* para carregar o circuito.  
+## Repository Structure  
+- `CIRCUITOS_SIMULIDE/` — simulation files created in SimulIDE  
+- `estudo_cseg/`, `2x7seg_counter_BCD/`, ... — AVR subprojects (Microchip/Atmel Studio) for study  
+- `projeto_parte_display/` — AVR project implementing a **7-segment display counter**  
 
 ---
 
-## Executar firmware (`.hex`) no SimulIDE
-1. No Microchip Studio, compile o projeto (Build → Build Solution). O arquivo `.hex` normalmente fica em `Debug/` ou `Release/` dentro da pasta do projeto.  
-2. Localize o caminho completo do arquivo `.hex` (ex.: `C:\...\<projeto>\Debug\<nome_do_projeto.hex>`).  
-3. No SimulIDE:
-   - Dê duplo clique no componente do microcontrolador (mega328) para abrir as propriedades.  
-   - No campo **Firmware** cole o caminho completo do `.hex` (sem aspas) e confirme.  
-   - Inicie a simulação.
+## How to Open / Run  
+
+### Projects in Microchip (Atmel) Studio  
+1. Open **Microchip Studio**  
+2. Go to **File → Open → Project/Solution**  
+3. Navigate to the desired subproject folder (e.g., `.../Atmel Studio/7.0/projeto_parte_display/`)  
+4. Open the project solution file (`*.atsln` or similar)  
+5. In **Solution Explorer**, double-click `main.asm` or the main source file to edit or run  
+
+> Note: File names and extensions may vary. Look for solution (`*.atsln`) or project files.  
+
+### SimulIDE Projects (`*.sim1`)  
+1. Open **SimulIDE**  
+2. Locate the desired `*.sim1` circuit file  
+3. Drag the file into SimulIDE or use *File → Open* to load it  
+
+---
+
+## Running Firmware (`.hex`) in SimulIDE  
+1. In Microchip Studio, build the project (Build → Build Solution). The `.hex` file is usually in `Debug/` or `Release/` inside the project folder.  
+2. Locate the full path of the `.hex` file (e.g., `C:\...\<project>\Debug\<project_name.hex>`)  
+3. In SimulIDE:  
+   - Double-click the microcontroller component (e.g., mega328)  
+   - In the **Firmware** field, paste the full `.hex` path and confirm  
+   - Start the simulation  
