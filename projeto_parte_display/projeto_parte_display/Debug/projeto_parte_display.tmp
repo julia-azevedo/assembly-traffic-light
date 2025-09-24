@@ -1,18 +1,18 @@
 <ASSEMBLER_INFO>
  <VERSION>2.2.8</VERSION>
  <DEVICE>"ATmega328P"</DEVICE>
- <WORKING_DIR>c:\users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\Debug</WORKING_DIR>
+ <WORKING_DIR>C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\Debug</WORKING_DIR>
  <INCLUDE_PATH>
   <DIR>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc</DIR>
   <DIR>C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avrassembler\Include</DIR>
   <DIR></DIR>
  </INCLUDE_PATH>
- <SOURCE_FILE>c:\users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm</SOURCE_FILE>
+ <SOURCE_FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm</SOURCE_FILE>
  <INCLUDED_FILES>
   <FILE>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m328Pdef.inc</FILE>
  </INCLUDED_FILES>
  <OBJECT_FILES>
-  <FILE>c:\users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\Debug\projeto_parte_display.obj</FILE>
+  <FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\Debug\projeto_parte_display.obj</FILE>
  </OBJECT_FILES>
  <HEX_FILES>
   <FILE>projeto_parte_display.hex</FILE>
@@ -22,12 +22,12 @@
   <FILE>projeto_parte_display.lss</FILE>
  </OUTPUT_FILES>
  <LABELS>
-  <RESET><FILE>c:\users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm</FILE><LINE>9</LINE></RESET>
-  <counter><FILE>c:\users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm</FILE><LINE>20</LINE></counter>
-  <send><FILE>c:\users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm</FILE><LINE>21</LINE></send>
-  <saida_portb><FILE>c:\users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm</FILE><LINE>32</LINE></saida_portb>
-  <alternar><FILE>c:\users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm</FILE><LINE>36</LINE></alternar>
-  <delay1000ms><FILE>c:\users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm</FILE><LINE>59</LINE></delay1000ms>
-  <delay_loop><FILE>c:\users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm</FILE><LINE>64</LINE></delay_loop>
+  <RESET><FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm</FILE><LINE>9</LINE></RESET>
+  <send_units><FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm</FILE><LINE>20</LINE></send_units>
+  <send_tens><FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm</FILE><LINE>31</LINE></send_tens>
+  <alternate><FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm</FILE><LINE>35</LINE></alternate>
+  <delay1000ms><FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm</FILE><LINE>59</LINE></delay1000ms>
+  <counter><FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm</FILE><LINE>44</LINE></counter>
+  <delay_loop><FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm</FILE><LINE>64</LINE></delay_loop>
  </LABELS>
 </ASSEMBLER_INFO>

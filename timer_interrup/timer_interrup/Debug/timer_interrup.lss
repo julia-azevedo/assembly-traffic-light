@@ -1,10 +1,12 @@
 
-AVRASM ver. 2.2.8  C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm Tue Sep 23 14:13:55 2025
+AVRASM ver. 2.2.8  C:\Users\marlo\Documents\Atmel Studio\7.0\timer_interrup\timer_interrup\main.asm Tue Sep 23 23:45:10 2025
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m328Pdef.inc'
+C:\Users\marlo\Documents\Atmel Studio\7.0\timer_interrup\timer_interrup\main.asm(1): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m328pdef.inc'
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m328Pdef.inc'
+C:\Users\marlo\Documents\Atmel Studio\7.0\timer_interrup\timer_interrup\main.asm(1): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m328pdef.inc'
                                  
-                                 .cseg 
+                                 .include "m328pdef.inc"
                                  
                                  ;***** Created: 2011-02-09 12:03 ******* Source: ATmega328P.xml **********
                                  ;*************************************************************************
@@ -985,73 +987,119 @@ AVRASM ver. 2.2.8  C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_displ
                                  
                                  ; ***** END OF FILE ******************************************************
                                  
-                                 .org 0 
                                  
-                                 .equ ClockMHz = 16
-                                 .equ DelayMs = 5
+                                 ;***** Created: 2011-02-09 12:03 ******* Source: ATmega328P.xml **********
+                                 ;*************************************************************************
+                                 ;* A P P L I C A T I O N   N O T E   F O R   T H E   A V R   F A M I L Y
+                                 ;* 
+                                 ;* Number            : AVR000
+                                 ;* File Name         : "m328Pdef.inc"
+                                 ;* Title             : Register/Bit Definitions for the ATmega328P
+                                 ;* Date              : 2011-02-09
+                                 ;* Version           : 2.35
+                                 ;* Support E-mail    : avr@atmel.com
+                                 ;* Target MCU        : ATmega328P
+                                 ;* 
+                                 ;* DESCRIPTION
+                                 ;* When including this file in the assembly program file, all I/O register 
+                                 ;* names and I/O register bit names appearing in the data book can be used.
+                                 ;* In addition, the six registers forming the three data pointers X, Y and 
+                                 ;* Z have been assigned names XL - ZH. Highest RAM address for Internal 
+                                 ;* SRAM is also defined 
+                                 ;* 
+                                 ;* The Register names are represented by their hexadecimal address.
+                                 ;* 
+                                 ;* The Register Bit names are represented by their bit number (0-7).
+                                 ;* 
+                                 ;* Please observe the difference in using the bit names with instructions
+                                 ;* such as "sbr"/"cbr" (set/clear bit in register) and "sbrs"/"sbrc"
+                                 ;* (skip if bit in register set/cleared). The following example illustrates
+                                 ;* this:
+                                 ;* 
+                                 ;* in    r16,PORTB             ;read PORTB latch
+                                 ;* sbr   r16,(1<<PB6)+(1<<PB5) ;set PB6 and PB5 (use masks, not bit#)
+                                 ;* out   PORTB,r16             ;output to PORTB
+                                 ;* 
+                                 ;* in    r16,TIFR              ;read the Timer Interrupt Flag Register
+                                 ;* sbrc  r16,TOV0              ;test the overflow flag (use bit#)
+                                 ;* rjmp  TOV0_is_set           ;jump if set
+                                 ;* ...                         ;otherwise do something else
+                                 ;*************************************************************************
                                  
-000000 c000                      rjmp RESET 
+                                 #ifndef _M328PDEF_INC_
+                                 #endif  /* _M328PDEF_INC_ */
+                                 
+                                 ; ***** END OF FILE ******************************************************
+                                 .list
+                                 .def tmp = r16
+                                 .cseg
+                                 .org 0x0000
+                                 
+                                 #define CLOCK 16.0e6 ;clock speed
+                                 #define TIMES_PER_SEC 60
+                                 #define DELAY 1/TIMES_PER_SEC ;seconds
+                                 ;#define DELAY 1 ; seconds
+                                 
+                                 .equ PRESCALE = 0b100 ;/256 prescale8
+                                 .equ PRESCALE_DIV = 256
+                                 .equ TOP = int((CLOCK/PRESCALE_DIV)*DELAY - 1)
+                                 .if TOP > 65535
+                                 .endif
+                                 
+000000 c016                      rjmp RESET
+                                 
+                                 ; Vetor de interrupção para Timer1 Compare A
+                                 .org OC1Aaddr
+000016 c018                      rjmp TIM1_COMPA
                                  
                                  RESET:
-                                 	; Ativa as portas B e D
-000001 ef0f                          ldi r16, 0b11111111 
-000002 b904                          out DDRB, r16
-000003 b90a                      	out DDRD, r16
+000017 94f8                      	cli
                                  
-                                 	; Inicia o valores que serão mostrados no display
-000004 e022                      	ldi r18, 2
-000005 e004                          ldi r16, 4 
-000006 e011                      	ldi r17, 0b00000001 ; valor inicial da porta D
+                                 	; PB5 saída (LED)
+000018 e200                      	ldi tmp, (1<<DDB5)	
+000019 b904                      	out DDRB, tmp
+00001a e000                      	ldi tmp, 0x00
+00001b b905                      	out PORTB, tmp
                                  
-                                 send_units:	
-000007 b91b                      	out PORTD, r17 ; Ativa o pino D0
+                                 	; Timer1: CTC, prescaler = 256
+00001c e000                      	ldi tmp, 0x00
+00001d 9300 0080                 	sts TCCR1A, tmp
+00001f e00c                      	ldi tmp, (1<<WGM12) | (1<<CS12)
+000020 9300 0081                 	sts TCCR1B, tmp
                                  
-                                 	; Verifica o valor de r17 para controlar a saída
-000008 3011                      	cpi r17, 0b00000001
-000009 f411                      	brne send_tens
-                                 		
-                                 	; Coloca o valor de r16 na porta B se r17 = 0b00000001, ou seja, se o pino D0 estiver ativo
-00000a b905                      	out PORTB, r16       
-00000b c001                      	rjmp alternate
-                                     
-                                 	send_tens:
-                                 		; Coloca o valor de r18 na porta B se r17 = 0b00000010	
-00000c b925                      		out PORTB, r18
+                                 	; OCR1A = 62499 (0xF423) para 1s
+000022 e004                      	ldi tmp, high(TOP)
+000023 9300 0089                 	sts OCR1AH, tmp
+000025 e100                      	ldi tmp, low(TOP)
+000026 9300 0088                 	sts OCR1AL, tmp
                                  
-                                 	alternate:
-                                 		; Alterna ou valores de r17 entre 0b00000001 e 0b00000010. Ou seja, alterna entre os pinos D0 e D1
-00000d e033                      		ldi r19, 0b00000011
-00000e 2713                      		eor r17, r19  ; 01 XOR 03 = 02, 02 XOR 03 = 01
-                                 		
-00000f d007                      		rcall delay1000ms
                                  
-000010 cff6                      		rjmp send_units
+                                 	; habilita interrupção Compare A
+000028 9100 006f                 	lds r16, TIMSK1
+00002a 6002                      	ori r16, 1 <<OCIE1A
+00002b 9300 006f                 	sts TIMSK1, r16
                                  
-                                 counter:
-                                     ; rcall delay1000ms
+00002d 9478                      	sei
                                  
-000011 9503                          inc r16  ; Incrementa o índice da tabela
-                                     
-                                     ; Verifica se r16 > 9 (0-9 são 10 valores)
-000012 300a                          cpi r16, 10
-000013 f3e8                          brlo counter ; Se menor que 10, continua no loop
-                                     
-                                     ; Se chegou a 10:
-000014 e000                          ldi r16, 0 ; reseta r16 para 0
-000015 9523                      	inc r18    ; incrementa r18
-000016 cffa                          rjmp counter
+                                 loop:
+00002e cfff                      	rjmp loop
                                  
-                                 ; --- Sub-rotina de delay (1000ms) ---
-                                 delay1000ms:
-000017 e060                          ldi r22, byte3(ClockMHz * 1000 * DelayMs / 5)
-000018 e35e                          ldi r21, high(ClockMHz * 1000 * DelayMs / 5)
-000019 e840                          ldi r20, low(ClockMHz * 1000 * DelayMs / 5)
+                                 ; ISR: Timer1 Compare A Match
+                                 TIM1_COMPA:
+00002f 930f                      	push r16
+000030 931f                      	push r17
+000031 b70f                      	in r16, SREG
+000032 930f                      	push r16
                                  
-                                 delay_loop:
-00001a 5041                          subi r20, 1
-00001b 4050                          sbci r21, 0
-00001c 4060                          sbci r22, 0
-00001d f7e0                          brcc delay_loop
+000033 b105                      	in r16, PORTB
+000034 e210                      	ldi r17, (1<<PORTB5)
+000035 2701                      	eor r16, r17
+000036 b905                      	out PORTB, r16
+                                 
+000037 910f                      	pop r16
+000038 bf0f                      	out SREG, r16
+000039 911f                      	pop r17
+00003a 910f                      	pop r16
 
 
 RESOURCE USE INFORMATION
@@ -1071,37 +1119,37 @@ counted separately from r26..r31 here.
 "ATmega328P" register use summary:
 x  :   0 y  :   0 z  :   0 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 
 r5 :   0 r6 :   0 r7 :   0 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 
-r13:   0 r14:   0 r15:   0 r16:   8 r17:   4 r18:   3 r19:   2 r20:   2 
-r21:   2 r22:   2 r23:   0 r24:   0 r25:   0 r26:   0 r27:   0 r28:   0 
+r13:   0 r14:   0 r15:   0 r16:  24 r17:   4 r18:   0 r19:   0 r20:   0 
+r21:   0 r22:   0 r23:   0 r24:   0 r25:   0 r26:   0 r27:   0 r28:   0 
 r29:   0 r30:   0 r31:   0 
-Registers used: 7 out of 35 (20.0%)
+Registers used: 2 out of 35 (5.7%)
 
 "ATmega328P" instruction use summary:
 .lds  :   0 .sts  :   0 adc   :   0 add   :   0 adiw  :   0 and   :   0 
 andi  :   0 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
-brcc  :   1 brcs  :   0 break :   0 breq  :   0 brge  :   0 brhc  :   0 
-brhs  :   0 brid  :   0 brie  :   0 brlo  :   1 brlt  :   0 brmi  :   0 
-brne  :   1 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
+brcc  :   0 brcs  :   0 break :   0 breq  :   0 brge  :   0 brhc  :   0 
+brhs  :   0 brid  :   0 brie  :   0 brlo  :   0 brlt  :   0 brmi  :   0 
+brne  :   0 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
 brvs  :   0 bset  :   0 bst   :   0 call  :   0 cbi   :   0 cbr   :   0 
-clc   :   0 clh   :   0 cli   :   0 cln   :   0 clr   :   0 cls   :   0 
+clc   :   0 clh   :   0 cli   :   1 cln   :   0 clr   :   0 cls   :   0 
 clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   0 cpc   :   0 
-cpi   :   2 cpse  :   0 dec   :   0 eor   :   1 fmul  :   0 fmuls :   0 
-fmulsu:   0 icall :   0 ijmp  :   0 in    :   0 inc   :   2 jmp   :   0 
-ld    :   0 ldd   :   0 ldi   :   9 lds   :   0 lpm   :   0 lsl   :   0 
+cpi   :   0 cpse  :   0 dec   :   0 eor   :   1 fmul  :   0 fmuls :   0 
+fmulsu:   0 icall :   0 ijmp  :   0 in    :   2 inc   :   0 jmp   :   0 
+ld    :   0 ldd   :   0 ldi   :   7 lds   :   1 lpm   :   0 lsl   :   0 
 lsr   :   0 mov   :   0 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
-neg   :   0 nop   :   0 or    :   0 ori   :   0 out   :   5 pop   :   0 
-push  :   0 rcall :   1 ret   :   1 reti  :   0 rjmp  :   4 rol   :   0 
-ror   :   0 sbc   :   0 sbci  :   2 sbi   :   0 sbic  :   0 sbis  :   0 
+neg   :   0 nop   :   0 or    :   0 ori   :   1 out   :   4 pop   :   3 
+push  :   3 rcall :   0 ret   :   0 reti  :   1 rjmp  :   3 rol   :   0 
+ror   :   0 sbc   :   0 sbci  :   0 sbi   :   0 sbic  :   0 sbis  :   0 
 sbiw  :   0 sbr   :   0 sbrc  :   0 sbrs  :   0 sec   :   0 seh   :   0 
-sei   :   0 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
-sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :   0 
-sub   :   0 subi  :   1 swap  :   0 tst   :   0 wdr   :   0 
+sei   :   1 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
+sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :   5 
+sub   :   0 subi  :   0 swap  :   0 tst   :   0 wdr   :   0 
 Instructions used: 13 out of 113 (11.5%)
 
 "ATmega328P" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x00003e     62      0     62   32768   0.2%
+[.cseg] 0x000000 0x000078     78      0     78   32768   0.2%
 [.dseg] 0x000100 0x000100      0      0      0    2048   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 

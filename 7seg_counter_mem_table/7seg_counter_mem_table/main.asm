@@ -15,7 +15,7 @@ Tabela_7seg:
     .db 0x4E, 0x3D ; C e D
     .db 0x4F, 0x47 ; E e F
 
-rjmp RESET 
+rjmp RESET
 
 RESET: 
     ldi r16, 0b11111111 
