@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.8  C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm Tue Sep 23 14:13:55 2025
+AVRASM ver. 2.2.8  C:\Users\marlo\Documents\Atmel Studio\7.0\timer\timer\main.asm Tue Sep 23 23:28:45 2025
 
 
 EQU  SIGNATURE_000 0000001e
@@ -696,11 +696,8 @@ EQU  TWIaddr      00000030
 EQU  SPMRaddr     00000032
 EQU  INT_VECTORS_SIZE 00000034
 EQU  ClockMHz     00000010
-EQU  DelayMs      00000005
+DEF  tmp          r16
 CSEG RESET        00000001
-CSEG send_units   00000007
-CSEG send_tens    0000000c
-CSEG alternate    0000000d
-CSEG delay1000ms  00000017
-CSEG counter      00000011
-CSEG delay_loop   0000001a
+CSEG blink        00000005
+CSEG delay1000ms  0000000b
+CSEG delay_loop   0000000e

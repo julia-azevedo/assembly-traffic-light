@@ -13,35 +13,35 @@ RESET:
 	out DDRD, r16
 
 	; Inicia o valores que serão mostrados no display
-	ldi r18, 1
-    ldi r16, 2  
+	ldi r18, 2
+    ldi r16, 4 
 	ldi r17, 0b00000001 ; valor inicial da porta D
 
-counter:
-	send:	
-		out PORTD, r17 ; Ativa o pino D0
+send_units:	
+	out PORTD, r17 ; Ativa o pino D0
 
-		; Verifica o valor de r17 para controlar a saída
-		cpi r17, 0b00000001
-		brne saida_portb
+	; Verifica o valor de r17 para controlar a saída
+	cpi r17, 0b00000001
+	brne send_tens
 		
-		; Coloca o valor de r16 na porta B se r17 = 0b00000001, ou seja, se o pino D0 estiver ativo
-		out PORTB, r16       
-		rjmp alternar
+	; Coloca o valor de r16 na porta B se r17 = 0b00000001, ou seja, se o pino D0 estiver ativo
+	out PORTB, r16       
+	rjmp alternate
     
-	saida_portb:
+	send_tens:
 		; Coloca o valor de r18 na porta B se r17 = 0b00000010	
 		out PORTB, r18
 
-	alternar:
+	alternate:
 		; Alterna ou valores de r17 entre 0b00000001 e 0b00000010. Ou seja, alterna entre os pinos D0 e D1
 		ldi r19, 0b00000011
 		eor r17, r19  ; 01 XOR 03 = 02, 02 XOR 03 = 01
 		
 		rcall delay1000ms
 
-		rjmp send
+		rjmp send_units
 
+counter:
     ; rcall delay1000ms
 
     inc r16  ; Incrementa o índice da tabela

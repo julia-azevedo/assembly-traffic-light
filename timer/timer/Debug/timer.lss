@@ -1,10 +1,10 @@
 
-AVRASM ver. 2.2.8  C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm Tue Sep 23 14:13:55 2025
+AVRASM ver. 2.2.8  C:\Users\marlo\Documents\Atmel Studio\7.0\timer\timer\main.asm Tue Sep 23 23:28:45 2025
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m328Pdef.inc'
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m328Pdef.inc'
                                  
-                                 .cseg 
+                                 
                                  
                                  ;***** Created: 2011-02-09 12:03 ******* Source: ATmega328P.xml **********
                                  ;*************************************************************************
@@ -985,73 +985,48 @@ AVRASM ver. 2.2.8  C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_displ
                                  
                                  ; ***** END OF FILE ******************************************************
                                  
-                                 .org 0 
+                                 #define TIMES_PER_SEC 20 ; quantidades de vezes que um led pisca por segundo
+                                 #define DELAY 1/TIMES_PER_SEC ;seconds
+                                 #define DelayMs DELAY * 1000
                                  
                                  .equ ClockMHz = 16
-                                 .equ DelayMs = 5
+                                 .def tmp = r16 
                                  
-000000 c000                      rjmp RESET 
+000000 c000                      rjmp RESET
                                  
                                  RESET:
-                                 	; Ativa as portas B e D
-000001 ef0f                          ldi r16, 0b11111111 
-000002 b904                          out DDRB, r16
-000003 b90a                      	out DDRD, r16
                                  
-                                 	; Inicia o valores que serão mostrados no display
-000004 e022                      	ldi r18, 2
-000005 e004                          ldi r16, 4 
-000006 e011                      	ldi r17, 0b00000001 ; valor inicial da porta D
+                                 	; PB5 saída (LED)
+000001 e200                      	ldi tmp, (1<<DDB5)	
+000002 b904                      	out DDRB, tmp
+000003 e000                      	ldi tmp, 0x00
+000004 b905                      	out PORTB, tmp
                                  
-                                 send_units:	
-000007 b91b                      	out PORTD, r17 ; Ativa o pino D0
                                  
-                                 	; Verifica o valor de r17 para controlar a saída
-000008 3011                      	cpi r17, 0b00000001
-000009 f411                      	brne send_tens
-                                 		
-                                 	; Coloca o valor de r16 na porta B se r17 = 0b00000001, ou seja, se o pino D0 estiver ativo
-00000a b905                      	out PORTB, r16       
-00000b c001                      	rjmp alternate
-                                     
-                                 	send_tens:
-                                 		; Coloca o valor de r18 na porta B se r17 = 0b00000010	
-00000c b925                      		out PORTB, r18
+                                 blink:
                                  
-                                 	alternate:
-                                 		; Alterna ou valores de r17 entre 0b00000001 e 0b00000010. Ou seja, alterna entre os pinos D0 e D1
-00000d e033                      		ldi r19, 0b00000011
-00000e 2713                      		eor r17, r19  ; 01 XOR 03 = 02, 02 XOR 03 = 01
-                                 		
-00000f d007                      		rcall delay1000ms
+000005 b105                      	in r16, PORTB
+000006 e210                      	ldi r17, (1<<PORTB5)
+000007 2701                      	eor r16, r17
+000008 b905                      	out PORTB, r16
                                  
-000010 cff6                      		rjmp send_units
+000009 d001                      	rcall delay1000ms
                                  
-                                 counter:
-                                     ; rcall delay1000ms
+00000a cffa                      	rjmp blink
                                  
-000011 9503                          inc r16  ; Incrementa o índice da tabela
-                                     
-                                     ; Verifica se r16 > 9 (0-9 são 10 valores)
-000012 300a                          cpi r16, 10
-000013 f3e8                          brlo counter ; Se menor que 10, continua no loop
-                                     
-                                     ; Se chegou a 10:
-000014 e000                          ldi r16, 0 ; reseta r16 para 0
-000015 9523                      	inc r18    ; incrementa r18
-000016 cffa                          rjmp counter
+                                 
                                  
                                  ; --- Sub-rotina de delay (1000ms) ---
                                  delay1000ms:
-000017 e060                          ldi r22, byte3(ClockMHz * 1000 * DelayMs / 5)
-000018 e35e                          ldi r21, high(ClockMHz * 1000 * DelayMs / 5)
-000019 e840                          ldi r20, low(ClockMHz * 1000 * DelayMs / 5)
+00000b e062                          ldi r22, byte3(ClockMHz * 1000 * DelayMs / 5)
+00000c e751                          ldi r21, high(ClockMHz * 1000 * DelayMs / 5)
+00000d e040                          ldi r20, low(ClockMHz * 1000 * DelayMs / 5)
                                  
                                  delay_loop:
-00001a 5041                          subi r20, 1
-00001b 4050                          sbci r21, 0
-00001c 4060                          sbci r22, 0
-00001d f7e0                          brcc delay_loop
+00000e 5041                          subi r20, 1
+00000f 4050                          sbci r21, 0
+000010 4060                          sbci r22, 0
+000011 f7e0                          brcc delay_loop
 
 
 RESOURCE USE INFORMATION
@@ -1071,37 +1046,37 @@ counted separately from r26..r31 here.
 "ATmega328P" register use summary:
 x  :   0 y  :   0 z  :   0 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 
 r5 :   0 r6 :   0 r7 :   0 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 
-r13:   0 r14:   0 r15:   0 r16:   8 r17:   4 r18:   3 r19:   2 r20:   2 
+r13:   0 r14:   0 r15:   0 r16:   7 r17:   2 r18:   0 r19:   0 r20:   2 
 r21:   2 r22:   2 r23:   0 r24:   0 r25:   0 r26:   0 r27:   0 r28:   0 
 r29:   0 r30:   0 r31:   0 
-Registers used: 7 out of 35 (20.0%)
+Registers used: 5 out of 35 (14.3%)
 
 "ATmega328P" instruction use summary:
 .lds  :   0 .sts  :   0 adc   :   0 add   :   0 adiw  :   0 and   :   0 
 andi  :   0 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
 brcc  :   1 brcs  :   0 break :   0 breq  :   0 brge  :   0 brhc  :   0 
-brhs  :   0 brid  :   0 brie  :   0 brlo  :   1 brlt  :   0 brmi  :   0 
-brne  :   1 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
+brhs  :   0 brid  :   0 brie  :   0 brlo  :   0 brlt  :   0 brmi  :   0 
+brne  :   0 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
 brvs  :   0 bset  :   0 bst   :   0 call  :   0 cbi   :   0 cbr   :   0 
 clc   :   0 clh   :   0 cli   :   0 cln   :   0 clr   :   0 cls   :   0 
 clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   0 cpc   :   0 
-cpi   :   2 cpse  :   0 dec   :   0 eor   :   1 fmul  :   0 fmuls :   0 
-fmulsu:   0 icall :   0 ijmp  :   0 in    :   0 inc   :   2 jmp   :   0 
-ld    :   0 ldd   :   0 ldi   :   9 lds   :   0 lpm   :   0 lsl   :   0 
+cpi   :   0 cpse  :   0 dec   :   0 eor   :   1 fmul  :   0 fmuls :   0 
+fmulsu:   0 icall :   0 ijmp  :   0 in    :   1 inc   :   0 jmp   :   0 
+ld    :   0 ldd   :   0 ldi   :   6 lds   :   0 lpm   :   0 lsl   :   0 
 lsr   :   0 mov   :   0 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
-neg   :   0 nop   :   0 or    :   0 ori   :   0 out   :   5 pop   :   0 
-push  :   0 rcall :   1 ret   :   1 reti  :   0 rjmp  :   4 rol   :   0 
+neg   :   0 nop   :   0 or    :   0 ori   :   0 out   :   3 pop   :   0 
+push  :   0 rcall :   1 ret   :   1 reti  :   0 rjmp  :   2 rol   :   0 
 ror   :   0 sbc   :   0 sbci  :   2 sbi   :   0 sbic  :   0 sbis  :   0 
 sbiw  :   0 sbr   :   0 sbrc  :   0 sbrs  :   0 sec   :   0 seh   :   0 
 sei   :   0 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
 sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :   0 
 sub   :   0 subi  :   1 swap  :   0 tst   :   0 wdr   :   0 
-Instructions used: 13 out of 113 (11.5%)
+Instructions used: 10 out of 113 (8.8%)
 
 "ATmega328P" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x00003e     62      0     62   32768   0.2%
+[.cseg] 0x000000 0x000026     38      0     38   32768   0.1%
 [.dseg] 0x000100 0x000100      0      0      0    2048   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 
