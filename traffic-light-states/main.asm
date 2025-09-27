@@ -18,6 +18,7 @@ OCI1A_Interrupt:
 	push temp
 	
 	subi count, 1 ; contador - 1
+	subi s2tempo, 1
 
 	pop temp
 	out SREG, temp
@@ -50,12 +51,17 @@ reset:
 	.equ T8 = 3
 	.equ T9 = 1
 
+	.equ SGY = 87 ; semafaro 2: green to YELLOW
+	.equ SYR = 4 ; semafaro 2: YELLOW to RED
+	.equ SRG = 28 ; semafaro 2: RED to GREEN
+
 
 	; SETANDO ESTADO INICIAL
 	ldi count, T0
 	ldi state, 0
 	ldi sema12, 0x0C
 	ldi sema34, 0x0C
+	ldi s2tempo, 87
 
 
 
@@ -185,11 +191,15 @@ reset:
 			rjmp fiat
 
 		state_2:
+			ldi s2tempo, 4
+			
 			ldi state,3
 			ldi count, T3
 			rjmp fiat
 
 		state_3:
+			ldi s2tempo, 48
+
 			ldi state, 4
 			ldi count, T4
 			rjmp fiat
@@ -210,11 +220,16 @@ reset:
 			rjmp fiat
 
 		state_7:
+			
+			
 			ldi state, 8
 			ldi count, T8
 			rjmp fiat
 
 		state_8:
+
+			ldi s2tempo, 88
+
 			ldi state, 9
 			ldi count, T9
 			rjmp fiat
@@ -226,6 +241,8 @@ reset:
 
 		fiat:
 		;  ------------------
+
+		
 
 		ldi temp, 0
 
