@@ -4,18 +4,12 @@
 
 ---
 
-## Overview  
-This repository contains Atmel/Microchip Studio project files, originally organized under:  
-`.../Atmel Studio/7.0`  
-
-The root folder groups AVR subprojects and simulation projects used during development and testing.  
-
----
 
 ## Repository Structure  
-- `CIRCUITOS_SIMULIDE/` — simulation files created in SimulIDE  
-- `estudo_cseg/`, `2x7seg_counter_BCD/`, ... — AVR subprojects (Microchip/Atmel Studio) for study  
-- `projeto_parte_display/` — AVR project implementing a **7-segment display counter**  
+- `assemble-control.asm` — build code created on Microchip Studio  
+- `semaforos-circuito.sim1` — circuit simulation build on SimulIDE
+- `simulide-executavel.hex` — hexdecimal code to upload on ATmega328p Firmware
+- `state-machine.png` — image of the traffic lights behavior implemented as a state machine
 
 ---
 
@@ -28,7 +22,6 @@ The root folder groups AVR subprojects and simulation projects used during devel
 4. Open the project solution file (`*.atsln` or similar)  
 5. In **Solution Explorer**, double-click `main.asm` or the main source file to edit or run  
 
-> Note: File names and extensions may vary. Look for solution (`*.atsln`) or project files.  
 
 ### SimulIDE Projects (`*.sim1`)  
 1. Open **SimulIDE**  
